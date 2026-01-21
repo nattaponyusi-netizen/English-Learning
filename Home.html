@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>English Academy | แหล่งเรียนรู้สำหรับนักศึกษา</title>
+
+   
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap');
+
+
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+
+        body { background-color: #f0f4f8; color: #1e293b; display: flex; min-height: 100vh; }
+
+
+
+        /* --- Sidebar Navigation --- */
+
+        .sidebar {
+
+            width: 300px; background: #ffffff; border-right: 1px solid #d1d5db;
+
+            height: 100vh; position: fixed; left: 0; top: 0; padding: 25px;
+
+            overflow-y: auto; z-index: 1100;
+
+        }
+
+        .sidebar-logo {
+
+            font-size: 1.6rem; font-weight: 600; color: #1d4ed8;
+
+            margin-bottom: 35px; display: flex; align-items: center; gap: 10px; text-decoration: none;
+
+        }
+
+        .menu-label {
+
+            font-size: 0.8rem; text-transform: uppercase; color: #64748b;
+
+            letter-spacing: 0.1em; margin: 25px 0 10px 10px; font-weight: 600;
+
+        }
+
+        .sidebar-menu { list-style: none; }
+
+        .sidebar-menu li a {
+
+            display: flex; align-items: center; padding: 12px 18px; color: #475569;
+
+            text-decoration: none; border-radius: 12px; transition: 0.3s; margin-bottom: 8px; cursor: pointer;
+
+        }
+
+        .sidebar-menu li a:hover { background: #f1f5f9; color: #1d4ed8; }
+
+        .sidebar-menu li a.active { background: #1d4ed8; color: white; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2); }
+
+
+
+        /* --- Main Content --- */
+
+        .main-wrapper { margin-left: 300px; width: calc(100% - 300px); display: flex; flex-direction: column; }
+
+        header {
+
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px);
+
+            border-bottom: 1px solid #e2e8f0; padding: 1rem 6%;
+
+            position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between;
+
+        }
+
+        .page-content { display: none; animation: fadeIn 0.4s ease; padding-bottom: 50px; }
+
+        .active-page { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
+
+        /* --- Components --- */
+
+        .hero { padding: 60px 6%; background: white; border-bottom-right-radius: 80px; }
+
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 40px 6%; }
+
+        .course-card { background: white; border-radius: 24px; overflow: hidden; border: 1px solid #e2e8f0; transition: 0.4s; }
+
+        .course-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+
+        .card-img { width: 100%; height: 180px; object-fit: cover; }
+
+        .card-body { padding: 25px; }
+
+        .btn-learn { background: #1d4ed8; color: white; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; transition: 0.3s; display: inline-block; text-align: center; }
+
+        .btn-learn:hover { background: #1e40af; }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px; background: #000; margin-bottom: 25px; }
+
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+       
+
+        .lesson-card { background: white; padding: 35px; border-radius: 24px; border: 1px solid #e2e8f0; margin: 40px 6%; }
+
+        .quiz-container-inner { max-width: 800px; margin: 0 auto; }
+
+        .quiz-item { margin-bottom: 25px; padding: 20px; background: #f8fafc; border-radius: 15px; border: 1px solid #e2e8f0; }
+
+        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+
+        .quiz-options label { background: white; padding: 10px 15px; border-radius: 10px; border: 1px solid #d1d5db; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+
+        .quiz-options label:hover { border-color: #1d4ed8; background: #eff6ff; }
+
+
+
+        @media (max-width: 992px) {
+
+            .sidebar { width: 80px; padding: 15px; }
+
+            .sidebar-logo span, .menu-label, .sidebar-menu li a span { display: none; }
+
+            .main-wrapper { margin-left: 80px; width: calc(100% - 80px); }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <aside class="sidebar">
+
+        <a href="javascript:void(0)" onclick="showContent('home')" class="sidebar-logo">🇬🇧 <span>EnglishPlus</span></a>
+
+        <ul class="sidebar-menu">
+
+            <p class="menu-label">เมนูหลัก</p>
+
+            <li><a id="link-home" onclick="showContent('home')" class="active">🏠 <span>หน้าหลัก</span></a></li>
+
+            <li><a id="link-about" onclick="showContent('about')">📖 <span>แนะนำการเรียน</span></a></li>
+
+            <p class="menu-label">คลังบทเรียน</p>
+
+            <li><a id="link-grammar" onclick="showContent('grammar')">🔤 <span>Grammar Essentials</span></a></li>
+
+            <li><a id="link-speaking" onclick="showContent('speaking')">🗣️ <span>Conversation</span></a></li>
+
+            <li><a id="link-vocab" onclick="showContent('vocab')">📚 <span>44 Phonics Sounds</span></a></li>
+
+            <li><a id="link-skills" onclick="showContent('skills')">🎯 <span>4 Essential Skills</span></a></li>
+
+            <li><a id="link-quiz" onclick="showContent('quiz')">📝 <span>Final Quiz (20 ข้อ)</span></a></li>
+
+        </ul>
+
+    </aside>
+
+
+
+    <div class="main-wrapper">
+
+        <header>
+
+            <div style="font-weight: 500; color: #1d4ed8;">Open Learning for Students 🎓</div>
+
+            <div style="color: #64748b; font-size: 0.9rem;">ยินดีต้อนรับเข้าสู่ระบบการศึกษาฟรี</div>
+
+        </header>
+
+
+
+        <main id="home" class="page-content active-page">
+
+            <section class="hero">
+
+                <h1 style="font-size: 2.8rem; margin-bottom: 15px;">พัฒนาทักษะภาษาอังกฤษ<br>เพื่ออนาคตของนักศึกษา</h1>
+
+                <p style="color: #475569; margin-bottom: 30px; max-width: 700px;">รวบรวมบทเรียนจากวิดีโอคุณภาพสูง เพื่อช่วยให้คุณเข้าใจไวยากรณ์ การสื่อสาร และการออกเสียงพื้นฐานอย่างเป็นระบบ</p>
+
+                <button class="btn-learn" onclick="showContent('grammar')">เริ่มบทเรียน Grammar</button>
+
+            </section>
+
+            <section class="course-grid">
+
+                <div class="course-card">
+
+                    <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500" class="card-img">
+
+                    <div class="card-body">
+
+                        <h3>Grammar Review</h3>
+
+                        <p style="color:#64748b; font-size:0.9rem; margin:10px 0;">ปูพื้นฐาน Verb to be และโครงสร้างประโยคสำคัญ</p>
+
+                        <button class="btn-learn" onclick="showContent('grammar')" style="width: 100%;">ศึกษาเลย</button>
+
+                    </div>
+
+                </div>
+
+                <div class="course-card">
+
+                    <img src="https://i.postimg.cc/RF1f94qJ/MS-student-group-conversation-1024x683.jpg" class="card-img">
+
+                    <div class="card-body">
+
+                        <h3>Daily Speaking</h3>
+
+                        <p style="color:#64748b; font-size:0.9rem; margin:10px 0;">50 ประโยคที่ใช้ได้จริงในทุกสถานการณ์</p>
+
+                        <button class="btn-learn" onclick="showContent('speaking')" style="width: 100%;">ฝึกพูดเลย</button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+
+        <main id="grammar" class="page-content">
+
+            <div class="lesson-card">
+
+                <h1>🔤 Grammar Essentials</h1>
+
+                <div class="video-container">
+
+                    <iframe src="https://www.youtube.com/embed/IznbxGpQsuA" title="Grammar Video" allowfullscreen></iframe>
+
+                </div>
+
+                <h2 style="color:#1d4ed8;">บทที่ 1: การใช้ Verb to be</h2>
+
+                <b>💡 Key Takeaway:</b> Verb to be (is, am, are) คือจุดเริ่มต้นของการบอกเล่าสถานะ หากใช้เป็น คุณจะเริ่มแต่งประโยคพื้นฐานได้มากกว่า 1,000 ประโยคทันที!
+                <ul style="margin-left:20px; color:#5d4037; line-height:1.8;">
+        <li><i>"The library <b>is</b> open until 9 PM."</i> (ห้องสมุดเปิดถึงสามทุ่ม)</li>
+        <li><i>"I <b>am</b> ready for the group presentation."</i> (ฉันพร้อมแล้วสำหรับการนำเสนองานกลุ่ม)</li>
+        <li><i>"They <b>are</b> my classmates from the English major."</i> (พวกเขาคือเพื่อนร่วมชั้นวิชาเอกภาษาอังกฤษของฉัน)</li>
+    </ul>
+
+            </div>
+
+        </main>
+
+
+
+        <main id="speaking" class="page-content">
+
+            <div class="lesson-card">
+
+                <h1>🗣️ Daily Conversation</h1>
+
+                <div class="video-container">
+
+                    <iframe src="https://www.youtube.com/embed/ooJ19WljtlM" title="Speaking Video" allowfullscreen></iframe>
+
+                </div>
+
+                <h2 style="color:#8b4513;">พูดอย่างมั่นใจ สื่อสารได้อย่างเป็นธรรมชาติ</h2>
+
+                <b>🔥 Quick Tip:</b> อย่ากังวลเรื่องสำเนียง (Accent) ให้เน้นที่การออกเสียงที่ถูกต้อง (Pronunciation) เพื่อให้สื่อสารได้เข้าใจที่สุด
+                <h3 style="margin-top:20px;">🚀 เทคนิคฝึกพูดตามคลิป:</h3>
+    <ul style="margin-left:20px; color:#5d4037; line-height:1.8;">
+        <li><b>Shadowing:</b> พูดตามคลิปทันทีที่ได้ยิน เพื่อฝึกจังหวะการหยุดหายใจ</li>
+        <li><b>Recording:</b> อัดเสียงตัวเองไว้ แล้วลองเปรียบเทียบกับต้นฉบับ</li>
+        <li><b>Keyword Focus:</b> จดจำประโยคสำเร็จรูป (Chunks) ไปใช้ เช่น <i>"How's it going?"</i> แทนการแปลทีละคำ</li>
+    </ul>
+
+            </div>
+
+        </main>
+
+
+
+        <main id="vocab" class="page-content">
+
+            <div class="lesson-card">
+
+                <h1>📚 44 Phonics Sounds</h1>
+
+                <div class="video-container">
+
+                    <iframe src="https://www.youtube.com/embed/DLNV-6XCUJk" title="Phonics Video" allowfullscreen></iframe>
+
+                </div>
+
+                <h2 style="color:#8b4513;">ไขรหัส 44 เสียงพื้นฐาน เพื่อการอ่านที่ลื่นไหล</h2>
+                <p>การรู้จัก Phonics คือ "ทางลัด" ที่ทำให้นักศึกษาสามารถอ่านคำที่ไม่เคยเห็นมาก่อนได้ถูกต้องกว่า 90%</p>
+                
+                <div class="tip-box" style="background: #efebe9;">
+        <b>🎯 Challenge:</b> ลองสังเกตคำว่า <i>'Cat'</i> กับ <i>'Car'</i> เสียงสระแตกต่างกันอย่างไร? การฝึก Phonics จะช่วยให้หูของคุณแยกแยะเสียงเหล่านี้ได้ชัดเจนขึ้น
+    </div>
+
+            </div>
+
+        </main>
+
+
+
+        <main id="about" class="page-content">
+
+            <div class="lesson-card">
+
+                <h1>📖 แนะนำการเรียน</h1>
+
+                <p>การเรียนภาษาอังกฤษให้ประสบความสำเร็จและใช้งานได้จริง เปรียบเสมือนการสร้างบ้านที่ต้องเริ่มจากรากฐานที่มั่นคงไปจนถึงการตกแต่งให้สวยงามครับ เพื่อให้ครอบคลุมเนื้อหาที่คุณมีในเว็บไซต์ (Grammar, Speaking, Phonics, Skills และ Quiz) ผมขอสรุป Roadmap การเรียนตั้งแต่ต้นจนถึงระดับสื่อสารได้คล่องแคล่ว</p>
+
+            </div>
+
+        </main>
+
+
+
+        <main id="quiz" class="page-content">
+
+            <div class="lesson-card">
+
+                <div class="quiz-container-inner">
+
+                    <div style="text-align: center;">
+
+                        <h1 style="font-size: 2.2rem; color: #1d4ed8;">📝 Final Quiz</h1>
+
+                        <p style="margin-bottom: 20px; color: #64748b;">ทดสอบ 20 ข้อ (ข้อละ 0.5 คะแนน | คะแนนเต็ม 10)</p>
+
+                    </div>
+
+                    <hr style="margin-bottom: 30px; opacity: 0.1;">
+
+                    <div id="quiz-container"></div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+
+                        <button class="btn-learn" id="submit-quiz" onclick="checkQuiz()" style="padding: 15px 40px;">ส่งคำตอบและดูคะแนน</button>
+
+                        <div id="result-area" style="margin-top: 25px; font-size: 1.3rem; font-weight: 600; display: none; padding: 20px; border-radius: 15px; background: #fff; border: 1px solid #e2e8f0;"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+
+    <main id="skills" class="page-content">
+
+    <div class="lesson-card" style="max-width: 900px; margin: 40px auto; padding: 40px;">
+
+        <h1 style="text-align: center; margin-bottom: 40px; color: #1d4ed8; font-size: 2.2rem;">🎯 4 ทักษะพื้นฐานในการเก่งภาษาอังกฤษ</h1>
+
+       
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+
+           
+
+            <div class="tip-box" style="background: #fff; border: 1px solid #e2e8f0; border-left: 8px solid #3b82f6; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; align-items: flex-start; gap: 20px;">
+
+                <div style="font-size: 2.5rem;">🎧</div>
+
+                <div>
+
+                    <h3 style="color: #1d4ed8; font-size: 1.4rem;">1. การฟัง (Listening)</h3>
+
+                    <p style="font-size: 1rem; margin-top: 5px; color: #1e293b; font-weight: 500;">คือการรับข้อมูล (Input) เพื่อสร้างความคุ้นเคยกับสำเนียงและโทนเสียง</p>
+
+                    <ul style="font-size: 0.95rem; margin-left: 20px; margin-top: 10px; color: #64748b; line-height: 1.6; display: flex; gap: 20px; flex-wrap: wrap; list-style-type: '✔ ';">
+
+                        <li>เริ่มจากสิ่งที่ชอบ (เพลง, หนัง)</li>
+
+                        <li>ฝึกฟังแบบจับใจความสำคัญ</li>
+
+                        <li>ฟังบ่อยๆ ให้หูชินกับภาษา</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="tip-box" style="background: #fff; border: 1px solid #e2e8f0; border-left: 8px solid #10b981; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; align-items: flex-start; gap: 20px;">
+
+                <div style="font-size: 2.5rem;">📖</div>
+
+                <div>
+
+                    <h3 style="color: #059669; font-size: 1.4rem;">2. การอ่าน (Reading)</h3>
+
+                    <p style="font-size: 1rem; margin-top: 5px; color: #1e293b; font-weight: 500;">ช่วยขยายคลังคำศัพท์และเห็นโครงสร้างไวยากรณ์ที่ถูกต้อง</p>
+
+                    <ul style="font-size: 0.95rem; margin-left: 20px; margin-top: 10px; color: #64748b; line-height: 1.6; display: flex; gap: 20px; flex-wrap: wrap; list-style-type: '✔ ';">
+
+                        <li>อ่านนิทานหรือข่าวสั้นๆ</li>
+
+                        <li>จดคำศัพท์ใหม่ที่ไม่รู้จัก</li>
+
+                        <li>สังเกตการใช้ Tenses ในประโยค</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="tip-box" style="background: #fff; border: 1px solid #e2e8f0; border-left: 8px solid #f59e0b; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; align-items: flex-start; gap: 20px;">
+
+                <div style="font-size: 2.5rem;">🗣️</div>
+
+                <div>
+
+                    <h3 style="color: #d97706; font-size: 1.4rem;">3. การพูด (Speaking)</h3>
+
+                    <p style="font-size: 1rem; margin-top: 5px; color: #1e293b; font-weight: 500;">การส่งสาร (Output) เพื่อฝึกการโต้ตอบและสร้างความมั่นใจ</p>
+
+                    <ul style="font-size: 0.95rem; margin-left: 20px; margin-top: 10px; color: #64748b; line-height: 1.6; display: flex; gap: 20px; flex-wrap: wrap; list-style-type: '✔ ';">
+
+                        <li>ฝึกพูดตามหน้ากระจก</li>
+
+                        <li>ลองคุยกับเพื่อนหรือชาวต่างชาติ</li>
+
+                        <li>เน้นการสื่อสารให้เข้าใจก่อน</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="tip-box" style="background: #fff; border: 1px solid #e2e8f0; border-left: 8px solid #ef4444; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; align-items: flex-start; gap: 20px;">
+
+                <div style="font-size: 2.5rem;">✍️</div>
+
+                <div>
+
+                    <h3 style="color: #dc2626; font-size: 1.4rem;">4. การเขียน (Writing)</h3>
+
+                    <p style="font-size: 1rem; margin-top: 5px; color: #1e293b; font-weight: 500;">ช่วยเรียบเรียงความคิดให้เป็นระเบียบและแม่นยำเรื่องไวยากรณ์</p>
+
+                    <ul style="font-size: 0.95rem; margin-left: 20px; margin-top: 10px; color: #64748b; line-height: 1.6; display: flex; gap: 20px; flex-wrap: wrap; list-style-type: '✔ ';">
+
+                        <li>หัดเขียน Diary สั้นๆ ทุกวัน</li>
+
+                        <li>ใช้คำเชื่อม (Linkers) ให้เป็น</li>
+
+                        <li>ตรวจสอบตัวสะกด (Spelling)</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white; border-radius: 24px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+
+            <h3 style="font-size: 1.4rem;">"The secret of getting ahead is getting started."</h3>
+
+            <p style="opacity: 0.9; font-size: 1rem; margin-top: 12px; line-height: 1.6;">
+
+                หัวใจสำคัญคือการสร้างสมดุลระหว่าง <b>Input</b> (การรับสาร) และ <b>Output</b> (การส่งสาร)
+
+                เริ่มฝึกทีละนิดแต่ทำทุกวัน แล้วคุณจะเห็นการเปลี่ยนแปลงครับ
+
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+    <script>
+
+    const quizData = [
+
+        { q: "1. I ____ a university student.", a: "am", o: ["am", "is", "are", "be"] },
+
+        { q: "2. She ____ very smart.", a: "is", o: ["am", "is", "are", "be"] },
+
+        { q: "3. They ____ playing football.", a: "are", o: ["am", "is", "are", "be"] },
+
+        { q: "4. We ____ happy to see you.", a: "are", o: ["am", "is", "are", "be"] },
+
+        { q: "5. 'Can I help you?' หมายถึงอะไร?", a: "ให้ฉันช่วยไหม", o: ["ไปไหนมา", "ให้ฉันช่วยไหม", "คุณเป็นใคร", "ขอบคุณนะ"] },
+
+        { q: "6. 'What time is it?' ถามเกี่ยวกับอะไร?", a: "เวลา", o: ["ชื่อ", "ราคา", "เวลา", "สถานที่"] },
+
+        { q: "7. ____ are you? - I'm fine, thanks.", a: "How", o: ["Who", "What", "How", "Where"] },
+
+        { q: "8. Nice to ____ you.", a: "meet", o: ["meet", "meets", "meeting", "met"] },
+
+        { q: "9. I go to the ____ to borrow books.", a: "library", o: ["market", "library", "hospital", "bank"] },
+
+        { q: "10. The opposite of 'Big' is ____.", a: "Small", o: ["Tall", "Small", "Fast", "Short"] },
+
+        { q: "11. Can you ____ English?", a: "speak", o: ["speak", "speaks", "speaking", "spoken"] },
+
+        { q: "12. I ____ like spicy food.", a: "don't", o: ["don't", "doesn't", "am not", "not"] },
+
+        { q: "13. This is ____ orange.", a: "an", o: ["a", "an", "the", "no article"] },
+
+        { q: "14. There ____ a book on the table.", a: "is", o: ["is", "am", "are", "be"] },
+
+        { q: "15. He ____ to school every day.", a: "goes", o: ["go", "goes", "going", "gone"] },
+
+        { q: "16. How many days are in a week?", a: "7", o: ["5", "6", "7", "8"] },
+
+        { q: "17. Which one is a color?", a: "Red", o: ["Red", "Circle", "Square", "Table"] },
+
+        { q: "18. Excuse me, ____ is the toilet?", a: "where", o: ["what", "where", "who", "why"] },
+
+        { q: "19. Look at ____. It's so beautiful.", a: "her", o: ["she", "her", "hers", "he"] },
+
+        { q: "20. ____ name is Somchai.", a: "My", o: ["I", "My", "Me", "Mine"] }
+
+    ];
+
+
+
+    function showContent(pageId) {
+
+        const pages = document.querySelectorAll('.page-content');
+
+        pages.forEach(page => page.classList.remove('active-page'));
+
+
+
+        const targetPage = document.getElementById(pageId);
+
+        if (targetPage) targetPage.classList.add('active-page');
+
+
+
+        const links = document.querySelectorAll('.sidebar-menu li a');
+
+        links.forEach(link => link.classList.remove('active'));
+
+       
+
+        const activeLink = document.getElementById('link-' + pageId);
+
+        if (activeLink) activeLink.classList.add('active');
+
+
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    }
+
+
+
+    function generateQuiz() {
+
+        const container = document.getElementById('quiz-container');
+
+        let html = '';
+
+        quizData.forEach((item, i) => {
+
+            html += `
+
+                <div class="quiz-item" id="item-${i}">
+
+                    <p style="font-weight: 500;">${item.q}</p>
+
+                    <div class="quiz-options">
+
+                        ${item.o.map(opt => `
+
+                            <label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label>
+
+                        `).join('')}
+
+                    </div>
+
+                    <div id="feedback-${i}" style="margin-top: 10px; font-size: 0.9rem; font-weight: 500; display: none;"></div>
+
+                </div>
+
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+    }
+
+
+
+    function checkQuiz() {
+
+        let correctAnswers = 0;
+
+       
+
+        quizData.forEach((item, i) => {
+
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+
+            const itemElement = document.getElementById(`item-${i}`);
+
+            const feedbackElement = document.getElementById(`feedback-${i}`);
+
+           
+
+            // ปิดการคลิกตัวเลือกหลังส่ง
+
+            const inputs = document.getElementsByName(`q${i}`);
+
+            inputs.forEach(input => input.disabled = true);
+
+
+
+            if (selected && selected.value === item.a) {
+
+                // ตอบถูก
+
+                correctAnswers++;
+
+                itemElement.style.borderColor = "#16a34a";
+
+                itemElement.style.background = "#f0fdf4";
+
+                feedbackElement.style.display = "block";
+
+                feedbackElement.style.color = "#16a34a";
+
+                feedbackElement.innerHTML = "✓ ถูกต้อง";
+
+            } else {
+
+                // ตอบผิด หรือ ไม่ได้ตอบ
+
+                itemElement.style.borderColor = "#dc2626";
+
+                itemElement.style.background = "#fef2f2";
+
+                feedbackElement.style.display = "block";
+
+                feedbackElement.style.color = "#dc2626";
+
+                feedbackElement.innerHTML = `✗ ผิด (คำตอบที่ถูกคือ: ${item.a})`;
+
+            }
+
+        });
+
+
+
+        let finalScore = correctAnswers * 0.5;
+
+        const resultArea = document.getElementById('result-area');
+
+        resultArea.style.display = 'block';
+
+
+
+        let message = finalScore >= 8 ? "ยอดเยี่ยมมาก! 🌟" : finalScore >= 5 ? "ผ่านเกณฑ์! 👍" : "พยายามเรียนรู้อีกนิดนะ 📚";
+
+        let resColor = finalScore >= 8 ? "#16a34a" : finalScore >= 5 ? "#1d4ed8" : "#dc2626";
+
+
+
+        resultArea.style.color = resColor;
+
+        resultArea.innerHTML = `ผลการทดสอบ: ตอบถูก ${correctAnswers} / ${quizData.length} ข้อ <br> คะแนนที่ได้: ${finalScore.toFixed(1)} / 10.0 <br> ${message}`;
+
+       
+
+        // เลื่อนหน้าจอขึ้นไปดูผลคะแนน หรือเลื่อนไปที่จุดแสดงผล
+
+        resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+       
+
+        // เปลี่ยนปุ่มเป็น 'ทำใหม่'
+
+        const btn = document.getElementById('submit-quiz');
+
+        btn.innerHTML = "เริ่มทำใหม่";
+
+        btn.onclick = () => location.reload();
+
+    }
+
+
+
+    window.onload = generateQuiz;
+
+    </script>
+
+    <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap');
+
+
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+
+
+
+    /* --- พื้นหลังรวมแบบห้องสมุด --- */
+
+    body {
+
+        background: #fdfaf5; /* สีโทนกระดาษถนอมสายตา */
+
+        color: #2d241e;
+
+        display: flex;
+
+        min-height: 100vh;
+
+        position: relative;
+
+    }
+
+
+
+    /* สร้างชั้นพื้นหลังภาพห้องสมุด */
+
+    body::before {
+
+        content: "";
+
+        position: fixed;
+
+        top: 0; left: 0; width: 100%; height: 100%;
+
+        background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=2000'); /* รูปห้องสมุด */
+
+        background-size: cover;
+
+        background-position: center;
+
+        filter: blur(8px) brightness(0.9); /* ปรับให้เบลอและมืดลงเล็กน้อยเพื่อให้อ่านง่าย */
+
+        z-index: -1;
+
+        opacity: 0.15; /* ปรับความเข้มจางของภาพพื้นหลัง */
+
+    }
+
+
+
+    /* --- Sidebar Navigation (Glass Design) --- */
+
+    .sidebar {
+
+        width: 300px;
+
+        background: rgba(255, 255, 255, 0.9); /* ขาวโปร่งแสง */
+
+        backdrop-filter: blur(10px);
+
+        border-right: 1px solid rgba(210, 180, 140, 0.3);
+
+        height: 100vh; position: fixed; left: 0; top: 0; padding: 25px;
+
+        overflow-y: auto; z-index: 1100;
+
+    }
+
+    .sidebar-logo {
+
+        font-size: 1.6rem; font-weight: 600; color: #8b4513; /* สีน้ำตาลไม้ */
+
+        margin-bottom: 35px; display: flex; align-items: center; gap: 10px; text-decoration: none;
+
+    }
+
+    .menu-label {
+
+        font-size: 0.8rem; text-transform: uppercase; color: #a68b7c;
+
+        letter-spacing: 0.1em; margin: 25px 0 10px 10px; font-weight: 600;
+
+    }
+
+    .sidebar-menu { list-style: none; }
+
+    .sidebar-menu li a {
+
+        display: flex; align-items: center; padding: 12px 18px; color: #5d4037;
+
+        text-decoration: none; border-radius: 12px; transition: 0.3s; margin-bottom: 8px; cursor: pointer;
+
+    }
+
+    .sidebar-menu li a:hover { background: #efebe9; color: #8b4513; }
+
+    .sidebar-menu li a.active {
+
+        background: #8b4513; color: white;
+
+        box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+
+    }
+
+
+
+    /* --- Main Content --- */
+
+    .main-wrapper { margin-left: 300px; width: calc(100% - 300px); display: flex; flex-direction: column; }
+
+   
+
+    header {
+
+        background: rgba(255, 255, 255, 0.8);
+
+        backdrop-filter: blur(10px);
+
+        border-bottom: 1px solid rgba(210, 180, 140, 0.3);
+
+        padding: 1rem 6%;
+
+        position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between;
+
+    }
+
+
+
+    .page-content { display: none; animation: fadeIn 0.4s ease; padding-bottom: 50px; }
+
+    .active-page { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
+
+    /* --- ส่วนประกอบเนื้อหา (Paper Concept) --- */
+
+    .hero {
+
+        padding: 60px 6%;
+
+        background: rgba(255, 255, 255, 0.6);
+
+        border-bottom-right-radius: 80px;
+
+    }
+
+    .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 40px 6%; }
+
+   
+
+    .course-card {
+
+        background: white; border-radius: 24px; overflow: hidden;
+
+        border: 1px solid #efebe9; transition: 0.4s;
+
+        box-shadow: 0 4px 15px rgba(139, 69, 19, 0.05);
+
+    }
+
+    .course-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(139, 69, 19, 0.1); }
+
+   
+
+    .lesson-card {
+
+        background: white; padding: 35px; border-radius: 24px;
+
+        border: 1px solid #efebe9; margin: 40px auto;
+
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+
+    }
+
+
+
+    .btn-learn {
+
+        background: #8b4513; color: white; padding: 12px 24px;
+
+        border-radius: 12px; border: none; cursor: pointer;
+
+        transition: 0.3s; display: inline-block; text-align: center;
+
+    }
+
+    .btn-learn:hover { background: #5d4037; }
+
+
+
+    .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px; background: #2d241e; margin-bottom: 25px; }
+
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+
+
+    .tip-box {
+
+        background: #fdfbf9; border-left: 5px solid #8b4513;
+
+        padding: 20px; border-radius: 10px; margin: 20px 0;
+
+        border-top: 1px solid #efebe9; border-right: 1px solid #efebe9; border-bottom: 1px solid #efebe9;
+
+    }
+
+
+
+    @media (max-width: 992px) {
+
+        .sidebar { width: 80px; padding: 15px; }
+
+        .sidebar-logo span, .menu-label, .sidebar-menu li a span { display: none; }
+
+        .main-wrapper { margin-left: 80px; width: calc(100% - 80px); }
+
+    }
+
+</style>
+
+</body>
+
+</html>
